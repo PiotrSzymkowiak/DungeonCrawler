@@ -20,7 +20,7 @@ public class TileCamera : MonoBehaviour
   void Awake()
   {
     COLLISIONS = Utils.RemoveLineEndings(mapCollisions.text);
-    LoadMap();   
+    //LoadMap();   
   }
 
   public void LoadMap()
