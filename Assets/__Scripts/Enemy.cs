@@ -30,14 +30,14 @@ public class Enemy : MonoBehaviour
   private Vector3 knockbackVel;
 
   protected Animator anim;
-  protected Rigidbody rigid;
+  protected Rigidbody2D rigid;
   protected SpriteRenderer sRend;
 
   protected virtual void Awake()
   {
     health = maxHealth;
     anim = GetComponent<Animator>();
-    rigid = GetComponent<Rigidbody>();
+    rigid = GetComponent<Rigidbody2D>();
     sRend = GetComponent<SpriteRenderer>();
   }
 
@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour
     knockback = false;
   }
 
-  void OnTriggerEnter(Collider colld)
+  void OnTriggerEnter2D(Collider2D colld)
   {
     if (invincible) return;
     DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();

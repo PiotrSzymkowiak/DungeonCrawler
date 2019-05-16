@@ -41,7 +41,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
   private Vector3 knockbackVel;
 
   private SpriteRenderer sRend;
-  private Rigidbody rigid;
+  private Rigidbody2D rigid;
   private Animator anim;
 
   private Vector3[] directions = new Vector3[]
@@ -72,7 +72,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
   void Awake()
   {
     sRend = GetComponent<SpriteRenderer>();
-    rigid = GetComponent<Rigidbody>();
+    rigid = GetComponent<Rigidbody2D>();
     anim = GetComponent<Animator>();   
     Health = maxHealth;
     lastSafeLoc = transform.position;
@@ -144,7 +144,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     rigid.velocity = vel * speed;
   }
 
-  void OnCollisionEnter(Collision coll)
+  void OnCollisionEnter2D(Collision2D coll)
   {
     if (invincible) return;
     DamageEffect dEf = coll.gameObject.GetComponent<DamageEffect>();
@@ -178,7 +178,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     }
   }
 
-  void OnTriggerEnter(Collider colld)
+  void OnTriggerEnter2D(Collider2D colld)
   {
     PickUp pup = colld.GetComponent<PickUp>();
     if (pup == null) return;

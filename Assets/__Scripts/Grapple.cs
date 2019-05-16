@@ -19,9 +19,9 @@ public class Grapple : MonoBehaviour
   public List<int> unsafeTiles;
 
   private Dray dray;
-  private Rigidbody rigid;
+  private Rigidbody2D rigid;
   private Animator anim;
-  private Collider drayColld;
+  private Collider2D drayColld;
 
   private GameObject grapHead;
   private LineRenderer grapLine;
@@ -56,9 +56,9 @@ public class Grapple : MonoBehaviour
     }
 
     dray = GetComponent<Dray>();
-    rigid = GetComponent<Rigidbody>();
+    rigid = GetComponent<Rigidbody2D>();
     anim = GetComponent<Animator>();
-    drayColld = GetComponent<Collider>();
+    drayColld = GetComponent<Collider2D>();
 
     Transform trans = transform.Find("Grappler");
     grapHead = trans.gameObject;
