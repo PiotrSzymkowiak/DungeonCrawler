@@ -13,12 +13,12 @@ public class PickUp : MonoBehaviour
 
   void Awake()
   {
-    GetComponent<Collider>().enabled = false;
+    GetComponent<Collider2D>().enabled = false;
     Invoke("Activate", COLLIDER_DELAY);
   }
 
   void Activate()
   {
-    GetComponent<Collider>().enabled = true;
+    GetComponent<Collider2D>().enabled = true;
   }
 }

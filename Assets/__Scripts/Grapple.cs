@@ -11,17 +11,14 @@ public class Grapple : MonoBehaviour
   public float grappleLength = 7;
   public float grappleInLength = 0.5f;
   public int unsafeTileHealthPenalty = 2;
-  public TextAsset mapGrappleable;
 
   [Header("Defined dynamically")]
   public eMode mode = eMode.none;
-  public List<int> grappleTiles;
-  public List<int> unsafeTiles;
 
   private Dray dray;
-  private Rigidbody rigid;
+  private Rigidbody2D rigid;
   private Animator anim;
-  private Collider drayColld;
+  private Collider2D drayColld;
 
   private GameObject grapHead;
   private LineRenderer grapLine;
@@ -38,27 +35,10 @@ public class Grapple : MonoBehaviour
 
   void Awake()
   {
-    string gTiles = mapGrappleable.text;
-    gTiles = Utils.RemoveLineEndings(gTiles);
-    grappleTiles = new List<int>();
-    unsafeTiles = new List<int>();
-    for (int i = 0; i < gTiles.Length; i++)
-    {
-      switch(gTiles[i])
-      {
-        case 'S':
-          grappleTiles.Add(i);
-          break;
-        case 'X':
-          unsafeTiles.Add(i);
-          break;
-      }
-    }
-
     dray = GetComponent<Dray>();
-    rigid = GetComponent<Rigidbody>();
+    rigid = GetComponent<Rigidbody2D>();
     anim = GetComponent<Animator>();
-    drayColld = GetComponent<Collider>();
+    drayColld = GetComponent<Collider2D>();
 
     Transform trans = transform.Find("Grappler");
     grapHead = trans.gameObject;
@@ -103,7 +83,7 @@ public class Grapple : MonoBehaviour
 
   void FixedUpdate()
   {
-    switch(mode)
+    switch (mode)
     {
       case eMode.gOut: //grapple goes out
         p1 += directions[facing] * grappleSpd * Time.fixedDeltaTime;
@@ -111,13 +91,15 @@ public class Grapple : MonoBehaviour
         grapLine.SetPosition(1, p1);
 
         //check if hit
-        int tileNum = TileCamera.GET_MAP(p1.x, p1.y);
-        if(grappleTiles.IndexOf(tileNum) != -1)
+        int layerMask = 1 << LayerMask.NameToLayer("Grappable");
+        RaycastHit2D hit = Physics2D.Raycast(p1, directions[facing], 0.1f, layerMask);     
+        if(hit)
         {
           mode = eMode.gInHit;
           break;
         }
-        if((p1-p0).magnitude >= grappleLength)
+
+        if ((p1 - p0).magnitude >= grappleLength)
         {
           mode = eMode.gInMiss;
         }
@@ -125,7 +107,7 @@ public class Grapple : MonoBehaviour
 
       case eMode.gInMiss: //miss, comes back with double speed
         p1 -= directions[facing] * 2 * grappleSpd * Time.fixedDeltaTime;
-        if (Vector3.Dot((p1-p0), directions[facing]) > 0)
+        if (Vector3.Dot((p1 - p0), directions[facing]) > 0)
         {
           //grapple still before Dray
           grapHead.transform.position = p1;
@@ -138,8 +120,8 @@ public class Grapple : MonoBehaviour
         break;
 
       case eMode.gInHit: //hit, pulls Dray to the wall
-        float dist = grappleInLength + grappleSpd * Time.fixedDeltaTime;
-        if(dist > (p1-p0).magnitude)
+        float dist = grappleInLength + grappleSpd * Time.fixedDeltaTime;        
+        if (dist > (p1 - p0).magnitude)
         {
           p0 = p1 - (directions[facing] * grappleInLength);
           transform.position = p0;
@@ -160,19 +142,19 @@ public class Grapple : MonoBehaviour
     drayColld.enabled = true;
 
     //check if tile is dangerous
-    int tileNum = TileCamera.GET_MAP(p0.x, p0.y);
-    if(mode == eMode.gInHit && unsafeTiles.IndexOf(tileNum) != -1)
-    {
-      //we're on a dangerous tile
-      dray.ResetInRoom(unsafeTileHealthPenalty);
-    }
+    
+    //if (mode == eMode.gInHit && unsafeTiles.IndexOf(tileNum) != -1)
+    //{
+    //  //we're on a dangerous tile
+    //  dray.ResetInRoom(unsafeTileHealthPenalty);
+    //}
 
     grapHead.SetActive(false);
 
     mode = eMode.none;
   }
 
-  void OnTriggerEnter(Collider other)
+  void OnTriggerEnter2D(Collider2D other)
   {
     Enemy e = drayColld.GetComponent<Enemy>();
     if (e == null) return;

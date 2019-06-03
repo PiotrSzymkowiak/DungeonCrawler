@@ -13,9 +13,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Grapple
+  - Grappable
+  - Enemy
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Ground
     uniqueID: 703656407
+    locked: 0
+  - name: Walls
+    uniqueID: 3059707361
     locked: 0
   - name: Default
     uniqueID: 0

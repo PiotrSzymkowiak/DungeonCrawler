@@ -13,21 +13,14 @@ public class Skeletos : Enemy, IFacingMover
   public int facing = 0;
   public float timeNextDecision = 0;
 
-  private InRoom inRm;
-
   public bool moving { get => true; }
-  public float gridMult { get => inRm.gridMult; }
-  public Vector2 roomPos { get => inRm.roomPos; set => inRm.roomPos = value; }
-  public Vector2 roomNum { get => inRm.roomNum; set => inRm.roomNum = value; }
-
   public int GetFacing() => facing;
   public float GetSpeed() => speed;
-  public Vector2 GetRoomPosOnGrid(float mult = -1) => inRm.GetRoomPosOnGrid(mult);
 
   protected override void Awake()
   {
     base.Awake();
-    inRm = GetComponent<InRoom>();
+
   }
 
   protected override void Update()

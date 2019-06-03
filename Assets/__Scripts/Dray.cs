@@ -41,9 +41,8 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
   private Vector3 knockbackVel;
 
   private SpriteRenderer sRend;
-  private Rigidbody rigid;
+  private Rigidbody2D rigid;
   private Animator anim;
-  private InRoom inRm;
 
   private Vector3[] directions = new Vector3[]
   {
@@ -63,13 +62,9 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 
   //IFacingMover impl
   public bool moving { get => mode == eMode.move; }
-  public float gridMult { get => inRm.gridMult; }
-  public Vector2 roomPos { get => inRm.roomPos; set => inRm.roomPos = value; }
-  public Vector2 roomNum { get => inRm.roomNum; set => inRm.roomNum = value; }
 
   public int GetFacing() => facing; //IFacingMover & IKeyMaster impl
   public float GetSpeed() => speed;
-  public Vector2 GetRoomPosOnGrid(float mult = -1) => inRm.GetRoomPosOnGrid(mult);
 
   //IKeyMaster impl
   public int keyCount { get => numKeys; set => numKeys = value; }
@@ -77,9 +72,8 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
   void Awake()
   {
     sRend = GetComponent<SpriteRenderer>();
-    rigid = GetComponent<Rigidbody>();
-    anim = GetComponent<Animator>();
-    inRm = GetComponent<InRoom>();
+    rigid = GetComponent<Rigidbody2D>();
+    anim = GetComponent<Animator>();   
     Health = maxHealth;
     lastSafeLoc = transform.position;
     lastSafeFacing = facing;
@@ -93,15 +87,6 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     {
       rigid.velocity = knockbackVel;
       if (Time.time < knockbackDone) return;
-    }
-
-    if(mode == eMode.transition)
-    {
-      rigid.velocity = Vector3.zero;
-      anim.speed = 0;
-      roomPos = transitionPos;
-      if (Time.time < transitionDone) return;
-      mode = eMode.idle;
     }
 
     dirHeld = -1;
@@ -159,54 +144,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     rigid.velocity = vel * speed;
   }
 
-  void LateUpdate()
-  {
-    Vector2 rPos = GetRoomPosOnGrid(0.5f);
-
-    int doorNum;
-    for(doorNum = 0; doorNum < 4; doorNum++)
-    {
-      if(rPos == InRoom.DOORS[doorNum])
-      {
-        break;
-      }
-    }
-
-    if (doorNum > 3 || doorNum != facing) return;
-
-    Vector2 rm = roomNum;
-    switch(doorNum)
-    {
-      case 0:
-        rm.x += 1;
-        break;
-      case 1:
-        rm.y += 1;
-        break;
-      case 2:
-        rm.x -= 1;
-        break;
-      case 3:
-        rm.y -= 1;
-        break;
-    }
-
-    if(rm.x >= 0 && rm.x <= InRoom.MAX_RM_X)
-    {
-      if(rm.y >= 0 && rm.y <= InRoom.MAX_RM_Y)
-      {
-        roomNum = rm;
-        transitionPos = InRoom.DOORS[(doorNum + 2) % 4];
-        roomPos = transitionPos;
-        lastSafeLoc = transform.position;
-        lastSafeFacing = facing;
-        mode = eMode.transition;
-        transitionDone = Time.time + transitionDelay;
-      }
-    }
-  }
-
-  void OnCollisionEnter(Collision coll)
+  void OnCollisionEnter2D(Collision2D coll)
   {
     if (invincible) return;
     DamageEffect dEf = coll.gameObject.GetComponent<DamageEffect>();
@@ -240,7 +178,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     }
   }
 
-  void OnTriggerEnter(Collider colld)
+  void OnTriggerEnter2D(Collider2D colld)
   {
     PickUp pup = colld.GetComponent<PickUp>();
     if (pup == null) return;
