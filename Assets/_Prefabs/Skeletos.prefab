@@ -158,9 +158,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 4
-  knockbackSpeed: 25
-  knockbackDuration: 0.25
-  invincibleDuration: 0.5
+  knockbackSpeed: 4
+  knockbackDuration: 1
+  invincibleDuration: 1
   PathComputeDistance: 4
   randomItemDrops:
   - {fileID: 2043454462723916679, guid: aeda39bd4b8a6b3418bc149badc1404d, type: 3}
@@ -263,7 +263,7 @@ GameObject:
   m_Layer: 10
   m_Name: DestinationPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
