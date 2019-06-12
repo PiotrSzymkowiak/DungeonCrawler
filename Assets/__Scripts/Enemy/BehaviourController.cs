@@ -21,12 +21,10 @@ public class BehaviourController
     {
       case BehavState.RndWalk: 
         behaviour = new RandomWalkBehaviour(enemy);
-        //Debug.Log("Enter random walk mode");
         break;
 
       case BehavState.AttackDray:
         behaviour = new AttackDrayBehaviour(enemy, dray);
-        //Debug.Log("Enter attack mode");
         break;
     }
   }
