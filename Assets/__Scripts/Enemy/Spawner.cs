@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-  public GameObject spawnPrefab;
+  public GameObject[] spawnPrefabs;
+  public Transform parent;
 
+
+  public float spawnRateTime = 30f;
   float startSpawning = 0;
 
   private void Start()
@@ -15,9 +18,11 @@ public class Spawner : MonoBehaviour
 
   private void Update()
   {
-    if(Time.time > startSpawning + 1f )
+    if (Time.time > startSpawning + spawnRateTime)
     {
-      GameObject monster = Instantiate(spawnPrefab, transform.position, transform.rotation);
+
+      int index = Random.Range(0, spawnPrefabs.Length);
+      GameObject monster = Instantiate(spawnPrefabs[index], transform.position, transform.rotation, parent);
       startSpawning = Time.time;
     }
   }

@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
 
   private float knockbackDone = 0;
   private float invincibleDone = 0;
+  private float originalSpeed;
   private Vector3 knockbackVel;
   private Vector2 curVelocity;
 
@@ -70,16 +71,17 @@ public class Enemy : MonoBehaviour
     behaviourHandle();
   }
 
+
   private bool knockbackVelHandle()
   {
+ 
     if (knockback)
     {
-      //rigid.velocity = knockbackVel;
       ai.speed = 5;
       if (Time.time < knockbackDone) return true;
     }
 
-    ai.speed = 1.5f;
+    ai.speed = 2f;
     anim.speed = 1;
     knockback = false;
     return false;
