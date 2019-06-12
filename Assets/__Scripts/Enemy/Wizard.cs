@@ -1,28 +1,27 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Assets.__Scripts.Enemy
+public class Wizard : Enemy
 {
-  public class Wizard : global::Enemy
+  public float attackRange;
+  private float lastAttackTime;
+  public float attackDelay;
+
+  public GameObject projectile;
+  public float ballForce;
+
+  protected override void Update()
   {
-    public float attackRange;
-    public int damge;
-    private float lastAttackTime;
-    public float attackDelay;
+    base.Update();
 
-    public GameObject projectile;
-    public float ballForce;
-
-    protected override void Update()
+    float distanceToPlayer = Vector3.Distance(transform.position, dray.transform.position);
+    Vector3 direction = dray.transform.position - transform.position;
+    if (distanceToPlayer < attackRange)
     {
-      base.Update();
-
-      float distanceToPlayer = Vector3.Distance(transform.position, dray.transform.position);
-      Vector3 direction = dray.transform.position - transform.position;
-      //if (distanceToPlayer < attackRange)
-
       if (Time.time > lastAttackTime + attackDelay)
       {
-        GameObject newBall = GameObject.Instantiate(projectile, transform.position, transform.rotation);
+        GameObject newBall = GameObject.Instantiate(projectile, transform.position, transform.rotation) as GameObject;
         newBall.GetComponent<Rigidbody2D>().AddRelativeForce(direction.normalized * ballForce);
         lastAttackTime = Time.time;
       }
