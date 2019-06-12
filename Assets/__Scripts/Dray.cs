@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 {
@@ -142,6 +143,9 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     }
 
     rigid.velocity = vel * speed;
+
+
+    if (Health <= 0) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
   }
 
   void OnCollisionEnter2D(Collision2D coll)
