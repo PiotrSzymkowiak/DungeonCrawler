@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 316891052634337096}
   - component: {fileID: 3278154040446992423}
   - component: {fileID: 48440352124298704}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Radar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,6 +217,7 @@ MonoBehaviour:
   knockbackSpeed: 10
   knockbackDuration: 0.25
   invincibleDuration: 0.5
+  speed: 1.5
   randomItemDrops: []
   guaranteedItemDrop: {fileID: 0}
   health: 0

@@ -86,7 +86,6 @@ public class Enemy : MonoBehaviour
 
   void OnTriggerEnter2D(Collider2D colld)
   {
-    if (!colld.CompareTag("Sword")) return;
     if (invincible) return;
     DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();
     if (dEf == null) return;
