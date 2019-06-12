@@ -59,7 +59,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 5
 --- !u!1 &1647135371388687237
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 4744461256588215302}
   - component: {fileID: 9222352601638739460}
   - component: {fileID: 2572465132349024167}
+  - component: {fileID: 304457496}
   m_Layer: 10
   m_Name: Ghost
   m_TagString: Untagged
@@ -260,10 +261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 8
-  knockbackSpeed: 10
-  knockbackDuration: 0.25
-  invincibleDuration: 0.5
-  speed: 1.5
+  knockbackSpeed: 4
+  knockbackDuration: 1
+  invincibleDuration: 1
+  PathComputeDistance: 4
   randomItemDrops: []
   guaranteedItemDrop: {fileID: 0}
   health: 0
@@ -334,3 +335,17 @@ MonoBehaviour:
   interpolatePathSwitches: 1
   switchPathInterpolationSpeed: 5
   targetCompatibility: {fileID: 0}
+--- !u!114 &304457496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4744461256588215311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9679e68a0f1144e79c664d9a11ca121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  target: {fileID: 1065266264037775524}
