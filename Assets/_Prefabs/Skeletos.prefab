@@ -157,6 +157,7 @@ MonoBehaviour:
   knockbackSpeed: 10
   knockbackDuration: 0.25
   invincibleDuration: 0.5
+  speed: 1.5
   randomItemDrops:
   - {fileID: 2043454462723916679, guid: aeda39bd4b8a6b3418bc149badc1404d, type: 3}
   - {fileID: 0}
