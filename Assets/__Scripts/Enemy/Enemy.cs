@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Enemy : MonoBehaviour
   public float knockbackSpeed = 10;
   public float knockbackDuration = 0.25f;
   public float invincibleDuration = 0.5f;
-  public float speed = 1.5f;
+  public float PathComputeDistance = 4f;
   public GameObject[] randomItemDrops;
   public GameObject guaranteedItemDrop = null;
 
@@ -29,9 +30,13 @@ public class Enemy : MonoBehaviour
   private float knockbackDone = 0;
   private float invincibleDone = 0;
   private Vector3 knockbackVel;
+  private Vector2 curVelocity;
 
   protected BehaviourController behavController;
   protected Dray dray;
+  protected AIDestinationSetter destSetter;
+  private AILerp ai;
+  protected Transform destinationPoint;
 
   protected Animator anim;
   protected Rigidbody2D rigid;
@@ -42,6 +47,8 @@ public class Enemy : MonoBehaviour
   public Rigidbody2D Rigid { get => rigid; }
   public SpriteRenderer SRend { get => sRend; }
   public BehaviourController BehavController { get => behavController; }
+  public AIDestinationSetter DestSetter { get => destSetter; }
+  public Transform DestinationPoint { get => destinationPoint; set => destinationPoint = value; }
 
   protected virtual void Awake()
   {
@@ -50,6 +57,9 @@ public class Enemy : MonoBehaviour
     rigid = GetComponent<Rigidbody2D>();
     sRend = GetComponent<SpriteRenderer>();
     dray = FindObjectOfType<Dray>();
+    destSetter = GetComponent<AIDestinationSetter>();
+    ai = GetComponent<AILerp>();
+    destinationPoint = GetComponentInChildren<Destination>().DestinationPoint;
     behavController = new BehaviourController(this, dray);
   }
 
@@ -64,10 +74,12 @@ public class Enemy : MonoBehaviour
   {
     if (knockback)
     {
-      rigid.velocity = knockbackVel;
+      //rigid.velocity = knockbackVel;
+      ai.speed = 5;
       if (Time.time < knockbackDone) return true;
     }
 
+    ai.speed = 1.5f;
     anim.speed = 1;
     knockback = false;
     return false;
@@ -81,6 +93,10 @@ public class Enemy : MonoBehaviour
 
   private void behaviourHandle()
   {
+    if (health < (float)maxHealth * 0.3)
+      behavController.ChangeBehaviour(BehavState.RunForLife);
+
+
     behavController.PerformBehaviour();
   }
 
@@ -113,9 +129,12 @@ public class Enemy : MonoBehaviour
       }
 
       knockbackVel = delta * knockbackSpeed;
-      rigid.velocity = knockbackVel;
+
+      //rigid.velocity = knockbackVel;
+      
 
       knockback = true;
+      DestinationPoint.position = transform.position + knockbackVel;
       knockbackDone = Time.time + knockbackDuration;
       anim.speed = 0;
     }

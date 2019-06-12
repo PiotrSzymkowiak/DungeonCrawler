@@ -16,7 +16,8 @@ public class AttackDrayBehaviour : IBehaviour
 
   public void Do()
   {
-    Vector3 dirToDray = dray.transform.position - enemy.transform.position;
-    enemy.Rigid.velocity = dirToDray.normalized * enemy.speed;
+    if (enemy.knockback) return;
+
+    enemy.DestinationPoint.position = dray.transform.position;
   }
 }
