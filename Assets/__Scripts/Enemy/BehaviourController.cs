@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 
-public enum BehavState { RndWalk, AttackDray }
+public enum BehavState { RndWalk, AttackDray, RunForLife }
 
 public class BehaviourController
 {
   private Enemy enemy;
   private Dray dray;
   private IBehaviour behaviour;
+
+  public BehavState CurrentState { get; private set; } = BehavState.RndWalk;
 
   public BehaviourController(Enemy enemy, Dray dray)
   {
@@ -21,10 +23,17 @@ public class BehaviourController
     {
       case BehavState.RndWalk: 
         behaviour = new RandomWalkBehaviour(enemy);
+        CurrentState = BehavState.RndWalk;
         break;
 
       case BehavState.AttackDray:
         behaviour = new AttackDrayBehaviour(enemy, dray);
+        CurrentState = BehavState.AttackDray;
+        break;
+
+      case BehavState.RunForLife:
+        behaviour = new RunForLifeBehaviour(enemy, dray);
+        CurrentState = BehavState.RunForLife;
         break;
     }
   }

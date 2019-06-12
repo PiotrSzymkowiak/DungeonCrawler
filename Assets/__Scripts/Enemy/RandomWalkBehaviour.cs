@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RandomWalkBehaviour :  IBehaviour
 {
@@ -26,7 +24,7 @@ public class RandomWalkBehaviour :  IBehaviour
       DecideDirection();
     }
 
-    enemy.Rigid.velocity = Enemy.directions[facing] * enemy.speed;
+    enemy.DestinationPoint.position = enemy.transform.position + Enemy.directions[facing] * enemy.PathComputeDistance;
   }
 
   void DecideDirection()
