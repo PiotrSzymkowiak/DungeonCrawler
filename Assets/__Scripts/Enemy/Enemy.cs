@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-  protected static Vector3[] directions = new Vector3[]
+  public static Vector3[] directions = new Vector3[]
   {
       Vector3.right,
       Vector3.up,
@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
   public float knockbackSpeed = 10;
   public float knockbackDuration = 0.25f;
   public float invincibleDuration = 0.5f;
+  public float speed = 1.5f;
   public GameObject[] randomItemDrops;
   public GameObject guaranteedItemDrop = null;
 
@@ -29,9 +30,18 @@ public class Enemy : MonoBehaviour
   private float invincibleDone = 0;
   private Vector3 knockbackVel;
 
+  protected BehaviourController behavController;
+  protected Dray dray;
+
   protected Animator anim;
   protected Rigidbody2D rigid;
   protected SpriteRenderer sRend;
+
+
+  public Animator Anim { get => anim; }
+  public Rigidbody2D Rigid { get => rigid; }
+  public SpriteRenderer SRend { get => sRend; }
+  public BehaviourController BehavController { get => behavController; }
 
   protected virtual void Awake()
   {
@@ -39,24 +49,44 @@ public class Enemy : MonoBehaviour
     anim = GetComponent<Animator>();
     rigid = GetComponent<Rigidbody2D>();
     sRend = GetComponent<SpriteRenderer>();
+    dray = FindObjectOfType<Dray>();
+    behavController = new BehaviourController(this, dray);
   }
 
   protected virtual void Update()
   {
-    if (invincible && Time.time > invincibleDone) invincible = false;
-    sRend.color = invincible ? Color.red : Color.white;
+    invinicbleHandle();
+    if(knockbackVelHandle()) return;
+    behaviourHandle();
+  }
+
+  private bool knockbackVelHandle()
+  {
     if (knockback)
     {
       rigid.velocity = knockbackVel;
-      if (Time.time < knockbackDone) return;
+      if (Time.time < knockbackDone) return true;
     }
 
     anim.speed = 1;
     knockback = false;
+    return false;
+  }
+
+  private void invinicbleHandle()
+  {
+    if (invincible && Time.time > invincibleDone) invincible = false;
+    sRend.color = invincible ? Color.red : Color.white;
+  }
+
+  private void behaviourHandle()
+  {
+    behavController.PerformBehaviour();
   }
 
   void OnTriggerEnter2D(Collider2D colld)
   {
+    if (!colld.CompareTag("Sword")) return;
     if (invincible) return;
     DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();
     if (dEf == null) return;
