@@ -35,7 +35,6 @@ public class Radar : MonoBehaviour
       Invoke("ChangeStateToRndWalk", 5);      
     }
   }
-
   private void ChangeStateToRndWalk()
   {
     enemy.BehavController.ChangeBehaviour(BehavState.RndWalk);
